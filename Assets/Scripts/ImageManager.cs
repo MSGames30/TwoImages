@@ -64,26 +64,49 @@ public class ImageManager : MonoBehaviour
     {
         //On cherche un objet de type SpawnedDefaut (Objet vide par défaut , avec comme seul composants un transform et le sript SpawnedDefault)
         //TODO utiliser FindObjectsByType et boucler sur la liste pour traiter tous les objets (le premier retourné n'étant pas forcément le dernier instantié)
-        SpawnedDefault objectToReplace = GameObject.FindFirstObjectByType<SpawnedDefault>();
+        //SpawnedDefault objectToReplace = GameObject.FindFirstObjectByType<SpawnedDefault>();
 
-        //Si on a trouvé l'objet et qu'il n'est pas null
-        if (objectToReplace != null)
+        SpawnedDefault[] objectsToReplace = GameObject.FindObjectsOfType<SpawnedDefault>();
+
+        foreach(SpawnedDefault objectTotest in objectsToReplace)
         {
-            //Si la variable isSet de l'objet par défaut est a false
-            if (!objectToReplace.iSSet)
+            if(objectTotest != null)
             {
-                //On instantie un objet de la liste via son index
-                GameObject newObject = Instantiate(objectsToSpawn[index], objectToReplace.transform);
-                //On passe la variable de notre objet a true
-                objectToReplace.iSSet = true;
+                //Si la variable isSet de l'objet par défaut est a false
+                if (!objectTotest.iSSet)
+                {
+                    //On instantie un objet de la liste via son index
+                    GameObject newObject = Instantiate(objectsToSpawn[index], objectTotest.transform);
+                    //On passe la variable de notre objet a true
+                    objectTotest.iSSet = true;
 
-                //On attache notre nouvelle objet a l'objet vide par defaut
-                newObject.transform.parent = objectToReplace.transform;
-                //On reset sa position locale (relative au nouveau parent) à 0,0,0
-                newObject.transform.localPosition = Vector3.zero;
-                //DEBUG on fait vibrer l'appareil pour voir si on passe bien dans la fonction
-                Handheld.Vibrate();
+                    //On attache notre nouvelle objet a l'objet vide par defaut
+                    newObject.transform.parent = objectTotest.transform;
+                    //On reset sa position locale (relative au nouveau parent) à 0,0,0
+                    objectTotest.transform.localPosition = Vector3.zero;
+                    //DEBUG on fait vibrer l'appareil pour voir si on passe bien dans la fonction
+                    Handheld.Vibrate();
+                }
             }
         }
+        ////Si on a trouvé l'objet et qu'il n'est pas null
+        //if (objectToReplace != null)
+        //{
+        //    //Si la variable isSet de l'objet par défaut est a false
+        //    if (!objectToReplace.iSSet)
+        //    {
+        //        //On instantie un objet de la liste via son index
+        //        GameObject newObject = Instantiate(objectsToSpawn[index], objectToReplace.transform);
+        //        //On passe la variable de notre objet a true
+        //        objectToReplace.iSSet = true;
+
+        //        //On attache notre nouvelle objet a l'objet vide par defaut
+        //        newObject.transform.parent = objectToReplace.transform;
+        //        //On reset sa position locale (relative au nouveau parent) à 0,0,0
+        //        newObject.transform.localPosition = Vector3.zero;
+        //        //DEBUG on fait vibrer l'appareil pour voir si on passe bien dans la fonction
+        //        Handheld.Vibrate();
+        //    }
+        //}
     }
 }
