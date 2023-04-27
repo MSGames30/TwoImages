@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
@@ -7,6 +8,11 @@ using UnityEngine.XR.ARFoundation;
 [RequireComponent(typeof(ARTrackedImageManager))]
 public class ImageManager : MonoBehaviour
 {
+    //Liste pour stocker les éléments que l'on fait spawn
+    List<GameObject> spawnedList = new List<GameObject>();
+
+    int spawnedCount = 0;
+
     //Serialized field : Permet d'exposer la variable objectToSpawn dans l'éditeur
     //objectToSpawn : Liste des préfabs que l'ont veut instancier
     [SerializeField]
@@ -63,8 +69,6 @@ public class ImageManager : MonoBehaviour
     public void SetNewMesh(int index)
     {
         //On cherche un objet de type SpawnedDefaut (Objet vide par défaut , avec comme seul composants un transform et le sript SpawnedDefault)
-        //TODO utiliser FindObjectsByType et boucler sur la liste pour traiter tous les objets (le premier retourné n'étant pas forcément le dernier instantié)
-        //SpawnedDefault objectToReplace = GameObject.FindFirstObjectByType<SpawnedDefault>();
 
         SpawnedDefault[] objectsToReplace = GameObject.FindObjectsOfType<SpawnedDefault>();
 
@@ -83,30 +87,14 @@ public class ImageManager : MonoBehaviour
                     //On attache notre nouvelle objet a l'objet vide par defaut
                     newObject.transform.parent = objectTotest.transform;
                     //On reset sa position locale (relative au nouveau parent) à 0,0,0
-                    objectTotest.transform.localPosition = Vector3.zero;
+                    newObject.transform.localPosition = Vector3.zero;
+
+                    spawnedList.Add(newObject);
                     //DEBUG on fait vibrer l'appareil pour voir si on passe bien dans la fonction
                     Handheld.Vibrate();
+
                 }
             }
         }
-        ////Si on a trouvé l'objet et qu'il n'est pas null
-        //if (objectToReplace != null)
-        //{
-        //    //Si la variable isSet de l'objet par défaut est a false
-        //    if (!objectToReplace.iSSet)
-        //    {
-        //        //On instantie un objet de la liste via son index
-        //        GameObject newObject = Instantiate(objectsToSpawn[index], objectToReplace.transform);
-        //        //On passe la variable de notre objet a true
-        //        objectToReplace.iSSet = true;
-
-        //        //On attache notre nouvelle objet a l'objet vide par defaut
-        //        newObject.transform.parent = objectToReplace.transform;
-        //        //On reset sa position locale (relative au nouveau parent) à 0,0,0
-        //        newObject.transform.localPosition = Vector3.zero;
-        //        //DEBUG on fait vibrer l'appareil pour voir si on passe bien dans la fonction
-        //        Handheld.Vibrate();
-        //    }
-        //}
     }
 }
